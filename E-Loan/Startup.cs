@@ -77,7 +77,7 @@ namespace E_Loan
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddScoped<ILoanAdminRepository, LoanAdminRepository>();
             //services.AddScoped<ILoanAdminServices, LoanAdminServices>();
-            services.AddScoped<ILoanClerkRepository, LoanClerkRepository>();
+            services.AddScoped<ILoanCustomerRepository, LoanCustomerRepository>();
             services.AddScoped<ILoanCustomerServices, LoanCustomerServices>();
             services.AddScoped<ILoanClerkRepository, LoanClerkRepository>();
             services.AddScoped<ILoanClerkServices, LoanClerkServices>();
