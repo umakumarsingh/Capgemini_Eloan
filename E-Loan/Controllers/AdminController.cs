@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using E_Loan.BusinessLayer;
 using E_Loan.Entities;
-using E_Loan.BusinessLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using E_Loan.BusinessLayer.Interfaces;
-using E_Loan.BusinessLayer.Services;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace E_Loan.Controllers
 {
@@ -35,24 +31,6 @@ namespace E_Loan.Controllers
             _configuration = configuration;
             //_adminServices = loanAdminServices;
         }
-
-        //[HttpPost]
-        //[Route("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var user = await _adminServices.Login(model);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    //return CreatedAtAction("AllProduct", new { ProductId = getproduct.ProductId }, getproduct);
-        //    return Ok();
-        //}
-
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)

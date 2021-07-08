@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Loan.Entities
+﻿namespace E_Loan.Entities
 {
     public enum BusinessStatus
     {

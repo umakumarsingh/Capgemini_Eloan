@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace E_Loan.BusinessLayer.Services.Repository
@@ -71,19 +70,19 @@ namespace E_Loan.BusinessLayer.Services.Repository
                 throw (ex);
             }
         }
-
+        /// <summary>
+        /// Make the loan application as "Recived" before starting loan process using this method
+        /// </summary>
+        /// <param name="loanId"></param>
+        /// <returns></returns>
         public async Task<LoanMaster> RecivedLoan(int loanId)
         {
             try
             {
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
-                if(findLoan.Status == LoanStatus.NotRecived)
+                if(findLoan != null && findLoan.Status == LoanStatus.NotRecived)
                 {
-                    LoanMaster ediLoan = new LoanMaster
-                    {
-                        Status = LoanStatus.Recived
-                    };
-                    _loanContext.loanMasters.Update(ediLoan);
+                    findLoan.Status = LoanStatus.Recived;
                     await _loanContext.SaveChangesAsync();
                 }
                 return findLoan;
@@ -93,7 +92,10 @@ namespace E_Loan.BusinessLayer.Services.Repository
                 throw (ex);
             }
         }
-
+        /// <summary>
+        /// Find and get all loan application that is recived for loan clerk
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<LoanMaster>> RecivedLoanApplication()
         {
             try
@@ -107,6 +109,5 @@ namespace E_Loan.BusinessLayer.Services.Repository
                 throw (ex);
             }
         }
-
     }
 }

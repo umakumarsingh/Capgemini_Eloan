@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using E_Loan.BusinessLayer.Interfaces;
+﻿using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace E_Loan.Controllers
 {
@@ -36,7 +34,7 @@ namespace E_Loan.Controllers
         /// <param name="loanId"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("accept/{loanId}/{remark}")]
         public async Task<LoanMaster> AcceptLoanApplication(int loanId, string remark)
         {
@@ -48,7 +46,7 @@ namespace E_Loan.Controllers
         /// <param name="loanId"></param>
         /// <param name="remark"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("reject/{loanId}/{remark}")]
         public async Task<LoanMaster> RejectLoanApplication(int loanId, string remark)
         {
@@ -77,9 +75,7 @@ namespace E_Loan.Controllers
                 {
                     SanctionedAmount = model.SanctionedAmount,
                     Termofloan = model.Termofloan,
-                    PaymentStartDate = model.PaymentStartDate,
-                    LoanCloserDate = model.LoanCloserDate,
-                    MonthlyPayment = model.MonthlyPayment
+                    PaymentStartDate = model.PaymentStartDate
                 };
                 var result = await _managerServices.SanctionedLoan(newApproved);
                 return Ok("Your Loan is Sanctioned, Your Loan process Id : " + result.Id);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace E_Loan.BusinessLayer
+﻿namespace E_Loan.BusinessLayer
 {
     public class UserRoleViewModel
     {

@@ -19,6 +19,36 @@ namespace E_Loan.DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("E_Loan.Entities.LoanApprovaltrans", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("LoanCloserDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("MonthlyPayment")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("PaymentStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("SanctionedAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Termofloan")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("loanApprovaltrans");
+                });
+
             modelBuilder.Entity("E_Loan.Entities.LoanMaster", b =>
                 {
                     b.Property<int>("LoanId")
@@ -54,6 +84,9 @@ namespace E_Loan.DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ManagerRemark")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -79,9 +112,11 @@ namespace E_Loan.DataLayer.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("AddressofProperty")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AppraisedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("LandValueinRs")

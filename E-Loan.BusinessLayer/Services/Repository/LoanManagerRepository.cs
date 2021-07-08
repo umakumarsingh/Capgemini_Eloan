@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace E_Loan.BusinessLayer.Services.Repository
@@ -32,12 +31,8 @@ namespace E_Loan.BusinessLayer.Services.Repository
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
                 if (findLoan.Status == LoanStatus.Recived)
                 {
-                    LoanMaster editLoan = new LoanMaster
-                    {
-                        Status = LoanStatus.Accept,
-                        ManagerRemark = remark
-                    };
-                    _loanContext.loanMasters.Update(editLoan);
+                    findLoan.Status = LoanStatus.Accept;
+                    findLoan.ManagerRemark = remark;
                     await _loanContext.SaveChangesAsync();
                 }
                 return findLoan;
@@ -77,12 +72,8 @@ namespace E_Loan.BusinessLayer.Services.Repository
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
                 if (findLoan.Status == LoanStatus.Recived)
                 {
-                    LoanMaster editLoan = new LoanMaster
-                    {
-                        Status = LoanStatus.Rejected,
-                        ManagerRemark = remark
-                    };
-                    _loanContext.loanMasters.Update(editLoan);
+                    findLoan.Status = LoanStatus.Rejected;
+                    findLoan.ManagerRemark = remark;
                     await _loanContext.SaveChangesAsync();
                 }
                 return findLoan;

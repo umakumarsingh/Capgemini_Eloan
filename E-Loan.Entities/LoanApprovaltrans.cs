@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace E_Loan.Entities
 {
@@ -13,16 +11,18 @@ namespace E_Loan.Entities
         public LoanApprovaltrans()
         {
             double intrestRate = .06;
+            
             double paymentAmount = (SanctionedAmount) * 
-                Math.Pow((1 + intrestRate / 100),Termofloan);
+                Math.Pow((1 + intrestRate / 100), Termofloan)/12;
 
             double monthlyPay = paymentAmount / Termofloan;
             MonthlyPayment = monthlyPay;
             //Calculate Loan Closer Date
-            double termdate = (Termofloan * 365);
-            DateTime closerDate = PaymentStartDate.AddDays(termdate);
+            
+            DateTime closerDate = PaymentStartDate.AddMonths((int)Termofloan);
             LoanCloserDate = closerDate;
         }
+
         [Key]
         public int Id { get; set; }
         [Required]
