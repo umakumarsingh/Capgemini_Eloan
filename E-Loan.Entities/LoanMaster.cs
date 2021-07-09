@@ -6,7 +6,7 @@ namespace E_Loan.Entities
     {
         public LoanMaster()
         {
-            Status = LoanStatus.NotRecived;
+            Status = LoanStatus.NotReceived;
             BusinessStructure = BusinessStatus.Individual;
         }
         [Key]

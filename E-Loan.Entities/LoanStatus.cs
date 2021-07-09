@@ -8,8 +8,8 @@ namespace E_Loan.Entities
     public enum LoanStatus
     {
         [Display(Name = "Not Recived")]
-        NotRecived = 1,
-        Recived = 2,
+        NotReceived = 1,
+        Received = 2,
         Accept = 3,
         Rejected =4
     }

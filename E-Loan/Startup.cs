@@ -67,8 +67,8 @@ namespace E_Loan
                 };
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddScoped<ILoanAdminRepository, LoanAdminRepository>();
-            //services.AddScoped<ILoanAdminServices, LoanAdminServices>();
+            services.AddScoped<ILoanAdminRepository, LoanAdminRepository>();
+            services.AddScoped<ILoanAdminServices, LoanAdminServices>();
             services.AddScoped<ILoanCustomerRepository, LoanCustomerRepository>();
             services.AddScoped<ILoanCustomerServices, LoanCustomerServices>();
             services.AddScoped<ILoanClerkRepository, LoanClerkRepository>();

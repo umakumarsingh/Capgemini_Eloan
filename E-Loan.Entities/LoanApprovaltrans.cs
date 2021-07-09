@@ -13,14 +13,15 @@ namespace E_Loan.Entities
             double intrestRate = .06;
             
             double paymentAmount = (SanctionedAmount) * 
-                Math.Pow((1 + intrestRate / 100), Termofloan)/12;
+                Math.Pow((1 + intrestRate / 100), (Termofloan/12));
 
-            double monthlyPay = paymentAmount / Termofloan;
+            double monthlyPay = (paymentAmount) / (Termofloan);
             MonthlyPayment = monthlyPay;
             //Calculate Loan Closer Date
-            
-            DateTime closerDate = PaymentStartDate.AddMonths((int)Termofloan);
-            LoanCloserDate = closerDate;
+
+            var closerDate = PaymentStartDate;
+            closerDate.AddMonths((int)Termofloan);
+            //LoanCloserDate = closerDate;
         }
 
         [Key]

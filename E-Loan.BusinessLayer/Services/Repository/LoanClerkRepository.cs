@@ -39,12 +39,12 @@ namespace E_Loan.BusinessLayer.Services.Repository
         /// Show/Get all loan application that status is Not Recived
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LoanMaster>> NotRecivedLoanApplication()
+        public async Task<IEnumerable<LoanMaster>> NotReceivedLoanApplication()
         {
             try
             {
                 var result = await _loanContext.loanMasters.
-                Where( x => x.Status == LoanStatus.NotRecived).Take(10).ToListAsync();
+                Where( x => x.Status == LoanStatus.NotReceived).Take(10).ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -75,14 +75,14 @@ namespace E_Loan.BusinessLayer.Services.Repository
         /// </summary>
         /// <param name="loanId"></param>
         /// <returns></returns>
-        public async Task<LoanMaster> RecivedLoan(int loanId)
+        public async Task<LoanMaster> ReceivedLoan(int loanId)
         {
             try
             {
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
-                if(findLoan != null && findLoan.Status == LoanStatus.NotRecived)
+                if(findLoan != null && findLoan.Status == LoanStatus.NotReceived)
                 {
-                    findLoan.Status = LoanStatus.Recived;
+                    findLoan.Status = LoanStatus.Received;
                     await _loanContext.SaveChangesAsync();
                 }
                 return findLoan;
@@ -96,12 +96,12 @@ namespace E_Loan.BusinessLayer.Services.Repository
         /// Find and get all loan application that is recived for loan clerk
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LoanMaster>> RecivedLoanApplication()
+        public async Task<IEnumerable<LoanMaster>> ReceivedLoanApplication()
         {
             try
             {
                 var result = await _loanContext.loanMasters.
-                Where(x => x.Status == LoanStatus.Recived).Take(10).ToListAsync();
+                Where(x => x.Status == LoanStatus.Received).Take(10).ToListAsync();
                 return result;
             }
             catch(Exception ex)

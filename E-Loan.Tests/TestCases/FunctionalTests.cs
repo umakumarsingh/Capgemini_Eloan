@@ -1,4 +1,5 @@
-﻿using E_Loan.BusinessLayer.Interfaces;
+﻿using E_Loan.BusinessLayer;
+using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.BusinessLayer.Services;
 using E_Loan.BusinessLayer.Services.Repository;
 using E_Loan.Entities;
@@ -15,9 +16,11 @@ namespace E_Loan.Tests.TestCases
         /// <summary>
         /// Creating Referance Variable and Mocking repository class
         /// </summary>
+        private readonly ILoanAdminServices _adminServices;
         private readonly ILoanCustomerServices _customerServices;
         private readonly ILoanClerkServices _clerkServices;
         private readonly ILoanManagerServices _managerServices;
+        public readonly Mock<ILoanAdminRepository> adminservice = new Mock<ILoanAdminRepository>();
         public readonly Mock<ILoanCustomerRepository> customerservice = new Mock<ILoanCustomerRepository>();
         public readonly Mock<ILoanClerkRepository> clerkservice = new Mock<ILoanClerkRepository>();
         public readonly Mock<ILoanManagerRepository> managerservice = new Mock<ILoanManagerRepository>();
@@ -26,6 +29,10 @@ namespace E_Loan.Tests.TestCases
         private readonly UserMaster _userMaster;
         private readonly LoanProcesstrans _loanProcesstrans;
         private readonly LoanApprovaltrans _loanApprovaltrans;
+        private readonly CreateRoleViewModel _createRoleViewModel;
+        private readonly UserRoleViewModel _userRoleViewModel;
+        private readonly ChangePasswordViewModel _changePasswordViewModel;
+        private readonly EditRoleViewModel _editRoleViewModel;
         public FunctionalTests()
         {
             /// <summary>
@@ -34,10 +41,11 @@ namespace E_Loan.Tests.TestCases
             _customerServices = new LoanCustomerServices(customerservice.Object);
             _clerkServices = new LoanClerkServices(clerkservice.Object);
             _managerServices = new LoanManagerServices(managerservice.Object);
+            _adminServices = new LoanAdminServices(adminservice.Object);
             _loanMaster = new LoanMaster
             {
                 LoanId = 1,
-                LoanName ="Home Loan",
+                LoanName = "Home Loan",
                 Date = System.DateTime.Now,
                 BusinessStructure = BusinessStatus.Individual,
                 Billing_Indicator = BillingStatus.Not_Salaried_Person,
@@ -48,11 +56,19 @@ namespace E_Loan.Tests.TestCases
                 AppliedBy = "Kumar",
                 CreatedOn = DateTime.Now,
                 ManagerRemark = "Ok",
-                Status = LoanStatus.NotRecived
+                Status = LoanStatus.NotReceived
             };
             _userMaster = new UserMaster
             {
-
+                Id = "1aaabedf-2002-4166-801a-ca83aac3247e",
+                UserName = "Kundan",
+                Email = "umakumarsingh@techademy.com",
+                PasswordHash = "Password@1234",
+                Contact = "9631438123",
+                Address = "Gaya",
+                IdproofTypes = IdProofType.Aadhar,
+                IdProofNumber = "AYIPK6551B",
+                Enabled = false
             };
             _loanProcesstrans = new LoanProcesstrans
             {
@@ -75,6 +91,28 @@ namespace E_Loan.Tests.TestCases
                 LoanCloserDate = DateTime.Now,
                 MonthlyPayment = 3330000
             };
+            _createRoleViewModel = new CreateRoleViewModel
+            {
+                RoleName = "Admin"
+            };
+            _userRoleViewModel = new UserRoleViewModel
+            {
+                UserId = "1b232594-4f44-4777-9008-480746341378",
+                Email = "umakumarsingh@gmail.com"
+            };
+            _changePasswordViewModel = new ChangePasswordViewModel
+            {
+                Name = "Uma",
+                Email = "umakumarsingh@iiht.com",
+                Password = "Password@123",
+                ConfirmPassword = "Password@123"
+            };
+            _editRoleViewModel = new EditRoleViewModel
+            {
+                Id = "7f737659-aa03-4633-ad16-4c1ac83cfe98",
+                RoleName = "",
+            };
+
         }
         /// <summary>
         /// Creating test output text file that store the result in boolean result
@@ -163,7 +201,7 @@ namespace E_Loan.Tests.TestCases
                 AppliedBy = "Kumar",
                 CreatedOn = DateTime.Now,
                 ManagerRemark = "Ok",
-                Status = LoanStatus.NotRecived
+                Status = LoanStatus.NotReceived
             };
             //Act
             customerservice.Setup(repo => repo.UpdateMortgage(_updateLoan)).ReturnsAsync(_updateLoan);
@@ -208,8 +246,8 @@ namespace E_Loan.Tests.TestCases
             //Arrange
             var res = false;
             //Action
-            clerkservice.Setup(repos => repos.RecivedLoanApplication());
-            var result = await _clerkServices.RecivedLoanApplication();
+            clerkservice.Setup(repos => repos.ReceivedLoanApplication());
+            var result = await _clerkServices.ReceivedLoanApplication();
             //Assertion
             if (result != null)
             {
@@ -229,8 +267,8 @@ namespace E_Loan.Tests.TestCases
             //Arrange
             var res = false;
             //Action
-            clerkservice.Setup(repos => repos.NotRecivedLoanApplication());
-            var result = await _clerkServices.NotRecivedLoanApplication();
+            clerkservice.Setup(repos => repos.NotReceivedLoanApplication());
+            var result = await _clerkServices.NotReceivedLoanApplication();
             //Assertion
             if (result != null)
             {
@@ -272,8 +310,8 @@ namespace E_Loan.Tests.TestCases
             //Arrange
             var res = false;
             //Action
-            clerkservice.Setup(repos => repos.RecivedLoan(_loanMaster.LoanId)).ReturnsAsync(_loanMaster); ;
-            var result = await _clerkServices.RecivedLoan(_loanMaster.LoanId);
+            clerkservice.Setup(repos => repos.ReceivedLoan(_loanMaster.LoanId)).ReturnsAsync(_loanMaster); ;
+            var result = await _clerkServices.ReceivedLoan(_loanMaster.LoanId);
             //Assertion
             if (result != null)
             {
@@ -391,6 +429,277 @@ namespace E_Loan.Tests.TestCases
             //Assert
             //final result displaying in text file
             await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_CheckLoanStatus=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Using the below method try to test CreateRole fro application
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_CreateRole_ForApplication()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.CreateRole(_createRoleViewModel));
+            var result = _adminServices.CreateRole(_createRoleViewModel);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_CreateRole_ForApplication=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Using the below test method Edit users in role and provide role.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_EditUsersInRole_ForApplication()
+        {
+            //Arrange
+            var res = false;
+            string roleId = "7f737659-aa03-4633-ad16-4c1ac83cfe98";
+            //Action
+            adminservice.Setup(repos => repos.EditUsersInRole(_userRoleViewModel, roleId));
+            var result = _adminServices.EditUsersInRole(_userRoleViewModel, roleId);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_EditUsersInRole_ForApplication=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Change an existing use passwor function test using below method.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_ChangeUserPassword_ForApplication()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.ChangeUserPassword(_changePasswordViewModel));
+            var result = _adminServices.ChangeUserPassword(_changePasswordViewModel);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_ChangeUserPassword_ForApplication=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Edit Role Name for an existing user role name.
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_EditRole_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.EditRole(_editRoleViewModel));
+            var result = _adminServices.EditRole(_editRoleViewModel);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_EditRole_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to find role by role name
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_FindRoleByRoleName_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string RoleName = "Admin";
+            //Action
+            adminservice.Setup(repos => repos.FindRoleByRoleName(RoleName));
+            var result = _adminServices.FindRoleByRoleName(RoleName);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_FindRoleByRoleName_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to find role by role id
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_FindRoleByRoleId_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string roleId = "7f737659-aa03-4633-ad16-4c1ac83cfe98";
+            //Action
+            adminservice.Setup(repos => repos.FindRoleByRoleId(roleId));
+            var result = _adminServices.FindRoleByRoleId(roleId);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_FindRoleByRoleId_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to list all role in controller
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_ListAllRole_ForApplicationRole()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.ListAllRole());
+            var result = _adminServices.ListAllRole();
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_ListAllRole_ForApplicationRole=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to get all user from database for admin
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_ListAllUser_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.ListAllUser());
+            var result = _adminServices.ListAllUser();
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_ListAllUser_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to disable user to block , by admin
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_DisableUser_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string userId = "1aaabedf-2002-4166-801a-ca83aac3247e";
+            //Action
+            adminservice.Setup(repos => repos.DisableUser(userId));
+            var result = _adminServices.DisableUser(userId);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_DisableUser_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to enable user to use e loan app
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_EnableUser_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string userId = "1aaabedf-2002-4166-801a-ca83aac3247e";
+            //Action
+            adminservice.Setup(repos => repos.EnableUser(userId));
+            var result = _adminServices.EnableUser(userId);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_EnableUser_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test Find use by email id
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_FindByEmailAsync_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string email = "umakumarsingh@iiht.com";
+            //Action
+            adminservice.Setup(repos => repos.FindByEmailAsync(email));
+            var result = _adminServices.FindByEmailAsync(email);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_FindByEmailAsync_ForApplicationUser=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to find user by userId
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_FindUserByIdAsync_ForApplicationUser()
+        {
+            //Arrange
+            var res = false;
+            string userId = "1aaabedf-2002-4166-801a-ca83aac3247e";
+            //Action
+            adminservice.Setup(repos => repos.FindUserByIdAsync(userId));
+            var result = _adminServices.FindUserByIdAsync(userId);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_FindUserByIdAsync_ForApplicationUser=" + res + "\n");
             return res;
         }
     }

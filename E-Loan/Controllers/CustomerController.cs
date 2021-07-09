@@ -88,14 +88,14 @@ namespace E_Loan.Controllers
             LoanMaster loanUpdate = await _customerServices.AppliedLoanStatus(loanId);
 
             //Check if loan status is "Recived" not possible to update.
-            if(loanUpdate.Status == LoanStatus.Recived)
+            if(loanUpdate.Status == LoanStatus.Received)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 { Status = "Error", Message = $"Loan Application Status = {loanUpdate.Status} cannot be Updated" });
             }
 
             //Update loan application if it is "not recived"
-            if(loanUpdate != null && loanUpdate.Status == LoanStatus.NotRecived)
+            if(loanUpdate != null && loanUpdate.Status == LoanStatus.NotReceived)
             {
                 loanUpdate.LoanName = model.LoanName;
                 loanUpdate.LoanAmount = model.LoanAmount;

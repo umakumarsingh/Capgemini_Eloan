@@ -48,7 +48,7 @@ namespace E_Loan.Tests.TestCases
                 AppliedBy = "Kumar",
                 CreatedOn = DateTime.Now,
                 ManagerRemark = "Ok",
-                Status = LoanStatus.NotRecived
+                Status = LoanStatus.NotReceived
             };
             _userMaster = new UserMaster
             {

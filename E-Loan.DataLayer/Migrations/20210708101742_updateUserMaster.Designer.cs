@@ -4,14 +4,16 @@ using E_Loan.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace E_Loan.DataLayer.Migrations
 {
     [DbContext(typeof(UserMasterDbContext))]
-    partial class UserMasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210708101742_updateUserMaster")]
+    partial class updateUserMaster
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

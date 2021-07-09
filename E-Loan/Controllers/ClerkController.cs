@@ -36,7 +36,7 @@ namespace E_Loan.Controllers
         [Route("not-recived")]
         public async Task<IEnumerable<LoanMaster>> NotRecivedLoanApplication()
         {
-            return await _clerkServices.NotRecivedLoanApplication();
+            return await _clerkServices.NotReceivedLoanApplication();
         }
         /// <summary>
         /// Show/Get the status and list of recived loan application
@@ -46,7 +46,7 @@ namespace E_Loan.Controllers
         [Route("recived")]
         public async Task<IEnumerable<LoanMaster>> RecivedLoanApplication()
         {
-            return await _clerkServices.RecivedLoanApplication();
+            return await _clerkServices.ReceivedLoanApplication();
         }
         /// <summary>
         /// Start the loan process after verify, //Make sure loan status is "recived" before process loan application
@@ -64,9 +64,9 @@ namespace E_Loan.Controllers
                 return BadRequest(ModelState);
             }
             //Make sure loan status is "recived" before process loan application
-            var loanStatus = await _clerkServices.RecivedLoan(loanId);
+            var loanStatus = await _clerkServices.ReceivedLoan(loanId);
             //Process loan adding with below attribute with loan Id
-            if (loanStatus.Status == LoanStatus.Recived)
+            if (loanStatus.Status == LoanStatus.Received)
             {
                 LoanProcesstrans newProcess = new LoanProcesstrans
                 {

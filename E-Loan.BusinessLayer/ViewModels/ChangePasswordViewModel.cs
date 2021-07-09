@@ -2,7 +2,7 @@
 
 namespace E_Loan.BusinessLayer
 {
-    public class EditUsersViewModel
+    public class ChangePasswordViewModel
     {
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
@@ -13,6 +13,9 @@ namespace E_Loan.BusinessLayer
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
         public string Contact { get; set; }
         public string Address { get; set; }
     }

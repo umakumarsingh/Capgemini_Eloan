@@ -9,8 +9,8 @@ namespace E_Loan.Entities
         /// </summary>
         public string Contact { get; set; }
         public string Address { get; set; }
-        //public enum IdproofType { get; set; }
-        public string IdProof { get; set; }
+        public IdProofType? IdproofTypes { get; set; }
+        public string IdProofNumber { get; set; }
         public bool Enabled { get; set; }
     }
 }

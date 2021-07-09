@@ -29,7 +29,7 @@ namespace E_Loan.BusinessLayer.Services.Repository
             try
             {
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
-                if (findLoan.Status == LoanStatus.Recived)
+                if (findLoan.Status == LoanStatus.Received)
                 {
                     findLoan.Status = LoanStatus.Accept;
                     findLoan.ManagerRemark = remark;
@@ -51,7 +51,7 @@ namespace E_Loan.BusinessLayer.Services.Repository
             try
             {
                 var result = await _loanContext.loanMasters.
-                Where(x => x.Status == LoanStatus.Recived).Take(10).ToListAsync();
+                Where(x => x.Status == LoanStatus.Received).Take(10).ToListAsync();
                 return result;
             }
             catch (Exception ex)
@@ -70,7 +70,7 @@ namespace E_Loan.BusinessLayer.Services.Repository
             try
             {
                 var findLoan = await _loanContext.loanMasters.FirstOrDefaultAsync(m => m.LoanId == loanId);
-                if (findLoan.Status == LoanStatus.Recived)
+                if (findLoan.Status == LoanStatus.Received)
                 {
                     findLoan.Status = LoanStatus.Rejected;
                     findLoan.ManagerRemark = remark;

@@ -28,9 +28,9 @@ namespace E_Loan.BusinessLayer.Services
         /// Show not recived loan application
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LoanMaster>> NotRecivedLoanApplication()
+        public async Task<IEnumerable<LoanMaster>> NotReceivedLoanApplication()
         {
-           return await _clerkRepository.NotRecivedLoanApplication();
+           return await _clerkRepository.NotReceivedLoanApplication();
         }
         /// <summary>
         /// Start the loan process after all status verifaction by loan clerk
@@ -47,17 +47,17 @@ namespace E_Loan.BusinessLayer.Services
         /// </summary>
         /// <param name="loanId"></param>
         /// <returns></returns>
-        public async Task<LoanMaster> RecivedLoan(int loanId)
+        public async Task<LoanMaster> ReceivedLoan(int loanId)
         {
-            return await _clerkRepository.RecivedLoan(loanId);
+            return await _clerkRepository.ReceivedLoan(loanId);
         }
         /// <summary>
         /// Sho/get all loan application thta is in recived form
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LoanMaster>> RecivedLoanApplication()
+        public async Task<IEnumerable<LoanMaster>> ReceivedLoanApplication()
         {
-            return await _clerkRepository.RecivedLoanApplication();
+            return await _clerkRepository.ReceivedLoanApplication();
         }
     }
 }

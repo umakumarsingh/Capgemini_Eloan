@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using E_Loan.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace E_Loan.BusinessLayer
 {
@@ -23,6 +24,8 @@ namespace E_Loan.BusinessLayer
         public string ConfirmPassword { get; set; }
         public string Contact { get; set; }
         public string Address { get; set; }
+        public IdProofType? IdproofTypes { get; set; }
+        public string IdProofNumber { get; set; }
         public bool Enabled { get; set; }
     }
 }

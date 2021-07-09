@@ -1,9 +1,9 @@
 ﻿using E_Loan.BusinessLayer;
+using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -19,18 +19,26 @@ namespace E_Loan.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        /// <summary>
+        /// Creating referance object of UserManager and RoleManager class and injecting in controller constructor
+        /// </summary>
         private readonly UserManager<UserMaster> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
-        //private readonly ILoanAdminServices _adminServices;
+        private readonly ILoanAdminServices _adminServices;
 
-        public AdminController(UserManager<UserMaster> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AdminController(UserManager<UserMaster> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILoanAdminServices loanAdminServices)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
-            //_adminServices = loanAdminServices;
+            _adminServices = loanAdminServices;
         }
+        /// <summary>
+        /// Login User using this methos and return back with JWT tokec for validation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -74,7 +82,11 @@ namespace E_Loan.Controllers
             }
             return Unauthorized();
         }
-
+        /// <summary>
+        /// Register new user for enroll in different role after that.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserMasterRegisterModel model)
@@ -88,7 +100,11 @@ namespace E_Loan.Controllers
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Name,
-                Enabled = model.Enabled,
+                Contact = model.Contact,
+                Address = model.Address,
+                IdproofTypes = model.IdproofTypes,
+                IdProofNumber = model.IdProofNumber,
+                Enabled = model.Enabled
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -96,69 +112,73 @@ namespace E_Loan.Controllers
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
+        /// <summary>
+        /// Create a new role if role is exists not possible to create
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create-role")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var roleExists = await roleManager.FindByNameAsync(model.RoleName);
+
             if (roleExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User Role already exists!" });
 
-            IdentityRole identityRole = new IdentityRole { Name = model.RoleName.Trim() };
-            IdentityResult result = await roleManager.CreateAsync(identityRole);
+            var result = await _adminServices.CreateRole(model);
 
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Role creation failed! Please check user role details and try again." });
 
             return Ok(new Response { Status = "Success", Message = "Role created successfully!" });
         }
-
+        /// <summary>
+        /// Provide different role for registered use. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("editusers-role/{roleId}")]
         public async Task<IActionResult> EditUsersInRole([FromBody] UserRoleViewModel model, string roleId)
         {
-            IdentityResult result = null;
-            var role = await roleManager.FindByIdAsync(roleId);
+            if (!ModelState.IsValid && roleId != null)
+            {
+                return BadRequest(ModelState);
+            }
+            var role = await _adminServices.FindRoleByRoleId(roleId);
             if (role == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 { Status = "Error", Message = $"Role With Id = {roleId} cannot be found" });
             }
-            try
+            var result = await _adminServices.EditUsersInRole(model, roleId);
+            if (!result.Succeeded)
             {
-                var user = await userManager.FindByEmailAsync(model.Email);
-
-                if (!await userManager.IsInRoleAsync(user, role.Name))
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 {
-                    result = await userManager.AddToRoleAsync(user, role.Name);
-                }
-                else if (await userManager.IsInRoleAsync(user, role.Name))
-                {
-                    result = await userManager.RemoveFromRoleAsync(user, role.Name);
-                }
-
-                if (!result.Succeeded)
-                {
-                    //return RedirectToAction("EditRole", new { Id = roleId });
-                    return StatusCode(StatusCodes.Status500InternalServerError, new Response
-                    {
-                        Status = "Error",
-                        Message = "User creation failed! Please check user details and try again."
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                throw (e);
+                    Status = "Error",
+                    Message = "User creation failed! Please check user details and try again."
+                });
             }
             return Ok(new Response { Status = "Success", Message = "User Role Updation successfully!" });
         }
-
+        /// <summary>
+        /// Edit register user or change user password only, UserName/Name and Email are not change and must provide
+        /// Change user Password only - Applicable using below method
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("edit-user")]
-        public async Task<IActionResult> EditUsers([FromBody] EditUsersViewModel model)
+        [Route("change-password")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody] ChangePasswordViewModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await _adminServices.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
@@ -166,13 +186,7 @@ namespace E_Loan.Controllers
             }
             else
             {
-                //to change password Name/UserName and email shoud not change only password can supplay new.
-                //user.UserName = model.Name;
-                //user.Email = model.Email;
-                user.PasswordHash = model.Password;
-                user.Contact = model.Contact;
-                user.Address = model.Address;
-                var result = await userManager.UpdateAsync(user);
+                var result = await _adminServices.ChangeUserPassword(model);
                 if (!result.Succeeded)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response
@@ -188,12 +202,16 @@ namespace E_Loan.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "User Updation successfully!" });
         }
-
+        /// <summary>
+        /// Edit an existing role if required using below method
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("edit-role")]
         public async Task<IActionResult> EditRole([FromBody] EditRoleViewModel model)
         {
-            var role = await roleManager.FindByIdAsync(model.Id);
+            var role = await _adminServices.FindRoleByRoleId(model.Id);
             if (role == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
@@ -201,8 +219,7 @@ namespace E_Loan.Controllers
             }
             else
             {
-                role.Name = model.RoleName;
-                var result = await roleManager.UpdateAsync(role);
+                var result = await _adminServices.EditRole(model);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("ListRole", "Admin");
@@ -214,38 +231,46 @@ namespace E_Loan.Controllers
                 return Ok(new Response { Status = "Success", Message = "User Role Edited successfully!" });
             }
         }
-
+        /// <summary>
+        /// List all an existing in database
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("list-role")]
         public async Task<IEnumerable<IdentityRole>> ListRole()
         {
-            var roles = await roleManager.Roles.ToListAsync();
+            var roles = await _adminServices.ListAllRole();
             return roles;
         }
-
+        /// <summary>
+        /// List an all existing user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("list-users")]
         public async Task<IEnumerable<UserMaster>> ListUser()
         {
-            var users = await userManager.Users.ToListAsync();
+            var users = await _adminServices.ListAllUser();
             return users;
         }
-        
+        /// <summary>
+        /// Disable an existing use if not required to work and login provide userId as GUID
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("disable-user/{userId}")]
         public async Task<IActionResult> DisableUser(string userId)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await _adminServices.FindUserByIdAsync(userId);
             //Check if user is disable or Enable
-            bool newStatus = true;
             if (user.Enabled == true)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User Id exists but locked, Contact Admin!" });
             }
             else
             {
-                user.Enabled = newStatus;
-                var result = await userManager.UpdateAsync(user);
+                var result = await _adminServices.DisableUser(userId);
                 if (!result.Succeeded)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response
@@ -259,22 +284,24 @@ namespace E_Loan.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "User disabled successfully!" });
         }
-
+        /// <summary>
+        /// Enable an existing user use id must be supplied GUID
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Enable-user/{userId}")]
-        public async Task<IActionResult> EnableeUser(string userId)
+        public async Task<IActionResult> EnableUser(string userId)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await _adminServices.FindUserByIdAsync(userId);
             //Check if user is disable or Enable
-            bool newStatus = false;
-            if (user.Enabled == true)
+            if (user.Enabled == false)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User Id exists but locked, Contact Admin!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Error", Message = "User Id Not locked, Contact Admin for More!" });
             }
             else
             {
-                user.Enabled = newStatus;
-                var result = await userManager.UpdateAsync(user);
+                var result = await _adminServices.EnableUser(userId);
                 if (!result.Succeeded)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response
