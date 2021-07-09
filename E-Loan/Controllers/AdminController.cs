@@ -290,7 +290,7 @@ namespace E_Loan.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("Enable-user/{userId}")]
+        [Route("enable-user/{userId}")]
         public async Task<IActionResult> EnableUser(string userId)
         {
             var user = await _adminServices.FindUserByIdAsync(userId);

@@ -33,7 +33,7 @@ namespace E_Loan.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("not-recived")]
+        [Route("not-received")]
         public async Task<IEnumerable<LoanMaster>> NotRecivedLoanApplication()
         {
             return await _clerkServices.NotReceivedLoanApplication();
@@ -43,7 +43,7 @@ namespace E_Loan.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("recived")]
+        [Route("received")]
         public async Task<IEnumerable<LoanMaster>> RecivedLoanApplication()
         {
             return await _clerkServices.ReceivedLoanApplication();
