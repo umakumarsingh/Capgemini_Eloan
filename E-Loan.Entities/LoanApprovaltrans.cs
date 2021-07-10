@@ -4,26 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace E_Loan.Entities
 {
     public class LoanApprovaltrans
-    {
-        /// <summary>
-        /// This class to use for approve the loan by manager
-        /// </summary>
-        public LoanApprovaltrans()
-        {
-            double intrestRate = .06;
-            
-            double paymentAmount = (SanctionedAmount) * 
-                Math.Pow((1 + intrestRate / 100), (Termofloan/12));
-
-            double monthlyPay = (paymentAmount) / (Termofloan);
-            MonthlyPayment = monthlyPay;
-            //Calculate Loan Closer Date
-
-            var closerDate = PaymentStartDate;
-            closerDate.AddMonths((int)Termofloan);
-            //LoanCloserDate = closerDate;
-        }
-
+    {    
         [Key]
         public int Id { get; set; }
         [Required]

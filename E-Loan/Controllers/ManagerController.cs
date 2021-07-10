@@ -1,5 +1,7 @@
 ﻿using E_Loan.BusinessLayer.Interfaces;
+using E_Loan.BusinessLayer.ViewModels;
 using E_Loan.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ namespace E_Loan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Manager,Admin")]
     public class ManagerController : ControllerBase
     {
         /// <summary>
@@ -60,7 +63,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("sanctioned-loan/{loanId}")]
-        public async Task<IActionResult> SanctionedLoan([FromBody] LoanApprovaltrans model, int loanId)
+        public async Task<IActionResult> SanctionedLoan([FromBody] LoanApprovalViewModel model, int loanId)
         {
             if (!ModelState.IsValid)
             {

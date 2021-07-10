@@ -1,7 +1,9 @@
-﻿using E_Loan.BusinessLayer.Interfaces;
+﻿using E_Loan.BusinessLayer;
+using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.BusinessLayer.Services;
 using E_Loan.BusinessLayer.Services.Repository;
 using E_Loan.Entities;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using System;
 using System.IO;
@@ -15,9 +17,11 @@ namespace E_Loan.Tests.TestCases
         /// <summary>
         /// Creating Referance Variable and Mocking repository class
         /// </summary>
+        private readonly ILoanAdminServices _adminServices;
         private readonly ILoanCustomerServices _customerServices;
         private readonly ILoanClerkServices _clerkServices;
         private readonly ILoanManagerServices _managerServices;
+        public readonly Mock<ILoanAdminRepository> adminservice = new Mock<ILoanAdminRepository>();
         public readonly Mock<ILoanCustomerRepository> customerservice = new Mock<ILoanCustomerRepository>();
         public readonly Mock<ILoanClerkRepository> clerkservice = new Mock<ILoanClerkRepository>();
         public readonly Mock<ILoanManagerRepository> managerservice = new Mock<ILoanManagerRepository>();
@@ -26,6 +30,10 @@ namespace E_Loan.Tests.TestCases
         private UserMaster _userMaster;
         private LoanProcesstrans _loanProcesstrans;
         private LoanApprovaltrans _loanApprovaltrans;
+        private CreateRoleViewModel _createRoleViewModel;
+        private UserRoleViewModel _userRoleViewModel;
+        private ChangePasswordViewModel _changePasswordViewModel;
+        private EditRoleViewModel _editRoleViewModel;
         public ExceptionalTest()
         {
             /// <summary>
@@ -34,6 +42,7 @@ namespace E_Loan.Tests.TestCases
             _customerServices = new LoanCustomerServices(customerservice.Object);
             _clerkServices = new LoanClerkServices(clerkservice.Object);
             _managerServices = new LoanManagerServices(managerservice.Object);
+            _adminServices = new LoanAdminServices(adminservice.Object);
             _loanMaster = new LoanMaster
             {
                 LoanId = 1,
@@ -52,7 +61,14 @@ namespace E_Loan.Tests.TestCases
             };
             _userMaster = new UserMaster
             {
-
+                UserName = "Kundan",
+                Email = "umakumarsingh@techademy.com",
+                PasswordHash = "Password@1234",
+                Contact = "9631438123",
+                Address = "Gaya",
+                IdproofTypes = IdProofType.PAN,
+                IdProofNumber = "AYIPK6551B",
+                Enabled = false
             };
             _loanProcesstrans = new LoanProcesstrans
             {
@@ -74,6 +90,27 @@ namespace E_Loan.Tests.TestCases
                 PaymentStartDate = DateTime.Now,
                 LoanCloserDate = DateTime.Now,
                 MonthlyPayment = 3330000
+            };
+            _createRoleViewModel = new CreateRoleViewModel
+            {
+                RoleName = "Admin"
+            };
+            _userRoleViewModel = new UserRoleViewModel
+            {
+                UserId = "1b232594-4f44-4777-9008-480746341378",
+                Email = "umakumarsingh@gmail.com"
+            };
+            _changePasswordViewModel = new ChangePasswordViewModel
+            {
+                Name = "Uma",
+                Email = "umakumarsingh@iiht.com",
+                Password = "Password@123",
+                ConfirmPassword = "Password@123"
+            };
+            _editRoleViewModel = new EditRoleViewModel
+            {
+                Id = "7f737659-aa03-4633-ad16-4c1ac83cfe98",
+                RoleName = "Admin",
             };
         }
         /// <summary>

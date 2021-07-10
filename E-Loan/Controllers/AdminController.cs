@@ -1,6 +1,7 @@
 ﻿using E_Loan.BusinessLayer;
 using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
@@ -83,18 +85,21 @@ namespace E_Loan.Controllers
             return Unauthorized();
         }
         /// <summary>
-        /// Register new user for enroll in different role after that.
+        /// Register new user for enroll in different role after that, make sure user is allready-
+        /// register or not if register return error using FindByEmailAsync method.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("register")]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromBody] UserMasterRegisterModel model)
         {
-            var userExists = await userManager.FindByEmailAsync(model.Email);
+            var userExists = await _adminServices.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
+            //New object and value for user
             UserMaster user = new UserMaster()
             {
                 Email = model.Email,
@@ -106,7 +111,7 @@ namespace E_Loan.Controllers
                 IdProofNumber = model.IdProofNumber,
                 Enabled = model.Enabled
             };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await _adminServices.Register(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
@@ -119,6 +124,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("create-role")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleViewModel model)
         {
             if (!ModelState.IsValid)
@@ -145,6 +151,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("editusers-role/{roleId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditUsersInRole([FromBody] UserRoleViewModel model, string roleId)
         {
             if (!ModelState.IsValid && roleId != null)
@@ -176,6 +183,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("change-password")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ChangeUserPassword([FromBody] ChangePasswordViewModel model)
         {
             var user = await _adminServices.FindByEmailAsync(model.Email);
@@ -209,6 +217,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("edit-role")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditRole([FromBody] EditRoleViewModel model)
         {
             var role = await _adminServices.FindRoleByRoleId(model.Id);
@@ -237,6 +246,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("list-role")]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<IdentityRole>> ListRole()
         {
             var roles = await _adminServices.ListAllRole();
@@ -248,6 +258,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("list-users")]
+        [Authorize(Roles = "Admin")]
         public async Task<IEnumerable<UserMaster>> ListUser()
         {
             var users = await _adminServices.ListAllUser();
@@ -260,6 +271,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("disable-user/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DisableUser(string userId)
         {
             var user = await _adminServices.FindUserByIdAsync(userId);
@@ -291,6 +303,7 @@ namespace E_Loan.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("enable-user/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EnableUser(string userId)
         {
             var user = await _adminServices.FindUserByIdAsync(userId);
@@ -315,10 +328,11 @@ namespace E_Loan.Controllers
             }
             return Ok(new Response { Status = "Success", Message = "User Enable successfully!" });
         }
-        
+
         //Edit multi user role and provide tehm new role.
         //[HttpPost]
         //[Route("editmultiusers-role/{roleId}")]
+        //[Authorize(Roles = "Admin")]
         //public async Task<IActionResult> EditMultiUsers-InRole(List<UserRoleViewModel> model, string roleId)
         //{
         //    var role = await roleManager.FindByIdAsync(roleId);
@@ -358,13 +372,14 @@ namespace E_Loan.Controllers
 
         //[HttpPost]
         //[Route("register-admin")]
+        //[Authorize(Roles = "Admin")]
         //public async Task<IActionResult> RegisterAdmin([FromBody] UserMasterRegisterModel model)
         //{
         //    var userExists = await userManager.FindByEmailAsync(model.Email);
         //    if (userExists != null)
         //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
-        //   UserMaster user = new UserMaster()
+        //    UserMaster user = new UserMaster()
         //    {
         //        Email = model.Email,
         //        SecurityStamp = Guid.NewGuid().ToString(),

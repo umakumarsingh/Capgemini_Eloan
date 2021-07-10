@@ -1,3 +1,0 @@
-Testfor_Validate_InvlidProcessLoanTrans=True
-Testfor_Validate_InvlidSanctionedLoanTrans=True
-Testfor_Validate_InvlidApplyMortage=True

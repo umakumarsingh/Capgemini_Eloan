@@ -1,5 +1,6 @@
 ﻿using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace E_Loan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Clerk,Admin")]
     public class ClerkController : ControllerBase
     {
         /// <summary>

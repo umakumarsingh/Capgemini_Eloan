@@ -1,14 +1,17 @@
 ﻿using E_Loan.BusinessLayer.Interfaces;
 using E_Loan.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace E_Loan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Customer")]
     public class CustomerController : ControllerBase
     {
         /// <summary>
@@ -20,7 +23,9 @@ namespace E_Loan.Controllers
             _customerServices = loanCustomerServices;
         }
         /// <summary>
-        /// Get loan status for customer while or before updating loan application
+        /// Get loan status for customer while or before updating loan application.
+        /// Get the loan application status by loanId
+        /// Check if loan applcant email id is match with loan applied email id, then show loan record.
         /// </summary>
         /// <param name="loanId"></param>
         /// <returns></returns>
@@ -32,11 +37,18 @@ namespace E_Loan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //Check if loan applcant email id is match with loan applied email id, then show loan record.
+            var emailId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //Get the loan application status by loanId
             var loanStatus = await _customerServices.AppliedLoanStatus(loanId);
-
             if (loanStatus == null)
             {
                 return NotFound();
+            }
+            if (loanStatus.Email != emailId)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response
+                { Status = "Error", Message = $"Loan Application Not found..." });
             }
             return loanStatus;
         }
@@ -53,6 +65,8 @@ namespace E_Loan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //get the login user email id and store in loan application
+            var emailId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             LoanMaster newLoan = new LoanMaster
             {
                 LoanName = model.LoanName,
@@ -62,7 +76,7 @@ namespace E_Loan.Controllers
                 Tax_Indicator = model.Tax_Indicator,
                 ContactAddress = model.ContactAddress,
                 Phone = model.Phone,
-                Email = model.Email,
+                Email = emailId,//Pass registred user email id while apply loan
                 AppliedBy = model.AppliedBy,
                 CreatedOn = DateTime.Now,
                 Status = model.Status
@@ -71,7 +85,8 @@ namespace E_Loan.Controllers
             return Ok("Thanks for apply, Your Loan Id : " + result.LoanId);
         }
         /// <summary>
-        /// Update loan/mortage if not recived by loan clerk then perforn actual update
+        /// Update loan/mortage if not recived by loan clerk then perforn actual update,
+        /// Pass registred user email id while update loan
         /// Check loan status is recived return a error message
         /// </summary>
         /// <param name="model"></param>
@@ -86,9 +101,9 @@ namespace E_Loan.Controllers
                 return BadRequest(ModelState);
             }
             LoanMaster loanUpdate = await _customerServices.AppliedLoanStatus(loanId);
-
+            var emailId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             //Check if loan status is "Recived" not possible to update.
-            if(loanUpdate.Status == LoanStatus.Received)
+            if (loanUpdate.Status == LoanStatus.Received)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 { Status = "Error", Message = $"Loan Application Status = {loanUpdate.Status} cannot be Updated" });
@@ -104,11 +119,11 @@ namespace E_Loan.Controllers
                 loanUpdate.Tax_Indicator = model.Tax_Indicator;
                 loanUpdate.ContactAddress = model.ContactAddress;
                 loanUpdate.Phone = model.Phone;
-                loanUpdate.Email = model.Email;
+                loanUpdate.Email = emailId;//Pass registred user email id while update loan
                 loanUpdate.AppliedBy = model.AppliedBy;
                 loanUpdate.CreatedOn = DateTime.Now;
                 loanUpdate.Status = model.Status;
-                
+                //Update loan application
                 await _customerServices.UpdateMortgage(loanUpdate);
                 return Ok(loanUpdate);
             }

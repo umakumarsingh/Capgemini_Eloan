@@ -11,6 +11,7 @@ namespace E_Loan.Entities
         NotReceived = 1,
         Received = 2,
         Accept = 3,
-        Rejected =4
+        Rejected =4,
+        Done = 5
     }
 }

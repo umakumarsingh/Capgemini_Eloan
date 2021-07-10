@@ -6,3 +6,4 @@ D:\Capgemini\E-Loan.Entities\obj\Debug\netcoreapp3.1\E-Loan.Entities.AssemblyInf
 D:\Capgemini\E-Loan.Entities\obj\Debug\netcoreapp3.1\E-Loan.Entities.csproj.CoreCompileInputs.cache
 D:\Capgemini\E-Loan.Entities\obj\Debug\netcoreapp3.1\E-Loan.Entities.dll
 D:\Capgemini\E-Loan.Entities\obj\Debug\netcoreapp3.1\E-Loan.Entities.pdb
+D:\Capgemini\E-Loan.Entities\obj\Debug\netcoreapp3.1\E-Loan.Entities.csprojAssemblyReference.cache

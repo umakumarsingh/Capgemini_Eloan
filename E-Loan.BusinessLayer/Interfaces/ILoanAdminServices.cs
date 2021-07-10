@@ -8,6 +8,7 @@ namespace E_Loan.BusinessLayer.Interfaces
     public interface ILoanAdminServices
     {
         Task<string> Login(LoginViewModel model);
+        Task<IdentityResult> Register(UserMaster user, string password);
         Task<IdentityResult> CreateRole(CreateRoleViewModel model);
         Task<IdentityResult> EditUsersInRole(UserRoleViewModel model, string roleId);
         Task<IdentityResult> ChangeUserPassword(ChangePasswordViewModel model);

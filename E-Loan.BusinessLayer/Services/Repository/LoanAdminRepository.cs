@@ -272,5 +272,34 @@ namespace E_Loan.BusinessLayer.Services.Repository
             //    throw (ex);
             //}
         }
+
+        public async Task<IdentityResult> Register(UserMaster user, string password)
+        {
+            try
+            {
+                var result = await userManager.CreateAsync(user, password);
+                if(result.Succeeded)
+                { 
+                    if (!await roleManager.RoleExistsAsync("Admin"))
+                        await roleManager.CreateAsync(new IdentityRole("Admin"));
+                    if (!await roleManager.RoleExistsAsync("Manager"))
+                        await roleManager.CreateAsync(new IdentityRole("Manager"));
+                    if (!await roleManager.RoleExistsAsync("LoanClerk"))
+                        await roleManager.CreateAsync(new IdentityRole("LoanClerk"));
+                    if (!await roleManager.RoleExistsAsync("Customer"))
+                        await roleManager.CreateAsync(new IdentityRole("Customer"));
+
+                    if (await roleManager.RoleExistsAsync("Customer"))
+                    {
+                        await userManager.AddToRoleAsync(user, "Customer");
+                    }
+                }
+                return result;
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+        }
     }
 }

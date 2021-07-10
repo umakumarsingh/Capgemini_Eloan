@@ -110,7 +110,7 @@ namespace E_Loan.Tests.TestCases
             _editRoleViewModel = new EditRoleViewModel
             {
                 Id = "7f737659-aa03-4633-ad16-4c1ac83cfe98",
-                RoleName = "",
+                RoleName = "Admin",
             };
 
         }
@@ -429,6 +429,28 @@ namespace E_Loan.Tests.TestCases
             //Assert
             //final result displaying in text file
             await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_CheckLoanStatus=" + res + "\n");
+            return res;
+        }
+        /// <summary>
+        /// Test to register new user for e loan application
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task<bool> Testfor_Register_NewUser()
+        {
+            //Arrange
+            var res = false;
+            //Action
+            adminservice.Setup(repos => repos.Register(_userMaster, _userMaster.PasswordHash));
+            var result = _adminServices.Register(_userMaster, _userMaster.PasswordHash);
+            //Assertion
+            if (result != null)
+            {
+                res = true;
+            }
+            //Assert
+            //final result displaying in text file
+            await File.AppendAllTextAsync("../../../../output_revised.txt", "Testfor_Register_NewUser=" + res + "\n");
             return res;
         }
         /// <summary>

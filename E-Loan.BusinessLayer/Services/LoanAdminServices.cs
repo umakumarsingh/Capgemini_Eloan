@@ -82,5 +82,9 @@ namespace E_Loan.BusinessLayer.Services
         {
             return await _adminRepository.FindUserByIdAsync(userId);
         }
+        public async Task<IdentityResult> Register(UserMaster user, string password)
+        {
+            return await _adminRepository.Register(user, password);
+        }
     }
 }
