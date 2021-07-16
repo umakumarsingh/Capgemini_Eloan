@@ -1,0 +1,5 @@
+Testfor_ValidateMobileNumber=True
+Testfor_ValidateLoanApprovaltransId=True
+Testfor_ValidateLoanProcesstransId=True
+Testfor_ValidateMortageApplicationLoanId=True
+Testfor_ValidEmail=True

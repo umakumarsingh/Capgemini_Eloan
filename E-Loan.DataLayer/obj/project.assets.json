@@ -5089,11 +5089,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Capgemini\\E-Loan.DataLayer\\E-Loan.DataLayer.csproj",
+      "projectUniqueName": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.DataLayer\\E-Loan.DataLayer.csproj",
       "projectName": "E-Loan.DataLayer",
-      "projectPath": "D:\\Capgemini\\E-Loan.DataLayer\\E-Loan.DataLayer.csproj",
+      "projectPath": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.DataLayer\\E-Loan.DataLayer.csproj",
       "packagesPath": "C:\\Users\\KUMARUMA\\.nuget\\packages\\",
-      "outputPath": "D:\\Capgemini\\E-Loan.DataLayer\\obj\\",
+      "outputPath": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.DataLayer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -5112,8 +5112,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj": {
-              "projectPath": "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj"
+            "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj": {
+              "projectPath": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj"
             }
           }
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj": {}
+    "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj": {}
   },
   "projects": {
-    "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj": {
+    "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj",
+        "projectUniqueName": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj",
         "projectName": "E-Loan.Entities",
-        "projectPath": "D:\\Capgemini\\E-Loan.Entities\\E-Loan.Entities.csproj",
+        "projectPath": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\E-Loan.Entities.csproj",
         "packagesPath": "C:\\Users\\KUMARUMA\\.nuget\\packages\\",
-        "outputPath": "D:\\Capgemini\\E-Loan.Entities\\obj\\",
+        "outputPath": "C:\\Users\\KUMARUMA\\Documents\\GitHub\\Capgemini_Eloan\\E-Loan.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -10,3 +10,15 @@ D:\Capgemini\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.csproj.Co
 D:\Capgemini\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.csproj.CopyComplete
 D:\Capgemini\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.dll
 D:\Capgemini\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.pdb
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\bin\Debug\netcoreapp3.1\E-Loan.DataLayer.deps.json
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\bin\Debug\netcoreapp3.1\E-Loan.DataLayer.dll
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\bin\Debug\netcoreapp3.1\E-Loan.DataLayer.pdb
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\bin\Debug\netcoreapp3.1\E-Loan.Entities.dll
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\bin\Debug\netcoreapp3.1\E-Loan.Entities.pdb
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.csprojAssemblyReference.cache
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.AssemblyInfoInputs.cache
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.AssemblyInfo.cs
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.csproj.CopyComplete
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.dll
+C:\Users\KUMARUMA\Documents\GitHub\Capgemini_Eloan\E-Loan.DataLayer\obj\Debug\netcoreapp3.1\E-Loan.DataLayer.pdb
